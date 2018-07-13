@@ -60,5 +60,4 @@ class CryptocurrenciesTableComponent extends React.Component {
 	}
 }
 
-
 export default CryptocurrenciesTableComponent;
