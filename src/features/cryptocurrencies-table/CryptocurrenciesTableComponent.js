@@ -55,7 +55,19 @@ class CryptocurrenciesTableComponent extends React.Component {
 	componentDidMount() {
 		fetch('https://api.coinmarketcap.com/v2/ticker/?limit=50&structure=array')
 			.then(response => response.json())
-			.then(responseObject => this.setState({ responseObject, isLoading: false }));
+			.then(responseObject => {
+				let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
+					let ammountYouOwn = localStorage.getItem(cryptocurrency.id);
+					if(ammountYouOwn) {
+						return {...cryptocurrency, ammountYouOwn};
+					}
+					return cryptocurrency;
+				});
+
+				let responseObjectWithAmmountYouOwnFromLocalStorage = {...responseObject, data: dataWithAmmountYouOwnFromLocalStorage}
+
+				this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
+			});
 	}
 
 	handleInputChangeAmmountYouOwn = (event) => {
