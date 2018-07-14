@@ -1,7 +1,6 @@
 import React from 'react';
 
 class CryptocurrenciesTableViewComponent extends React.Component {
-
 	render() {
 		return (
 			<table style={{ width: '100%' }}>

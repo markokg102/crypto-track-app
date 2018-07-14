@@ -1,0 +1,30 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "react-app"
+    ],
+    "rules": {
+        "vars-on-top": "error",
+        "no-undef": "error",
+        "no-undefined": "error",
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "guard-for-in": "error",
+        "no-eval": "error",
+        "no-with": "error",
+        "valid-typeof": "error",
+        "no-unused-vars": "error",
+        "no-continue": "warn",
+        "no-extra-semi": "warn",
+        "no-unreachable": "warn",
+        "no-unused-expressions": "warn",
+        "react/prefer-es6-class": "warn",
+        "no-console": "warn"
+    }
+}
