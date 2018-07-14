@@ -22,12 +22,12 @@ const ResultTable = (props) => {
 						<td>{cryptocurrency.quotes.USD.price}</td>
 						<td>{cryptocurrency.quotes.USD.percent_change_24h}</td>
 						<td>
-							<form onSubmit={(event) => { event.preventDefault(); }}>
+							<form onSubmit={(event) => props.handleSubmitAmmountYouOwn(event, cryptocurrency.id)}>
 								<input
 									style={{ width: '100%' }}
 									id={cryptocurrency.id}
-									onChange={props.handleChangeAmmountYouOwn}
-									value={cryptocurrency.ammountYouOwn ? cryptocurrency.ammountYouOwn : '' }
+									onChange={props.handleInputChangeAmmountYouOwn}
+									value={cryptocurrency.ammountYouOwn ? cryptocurrency.ammountYouOwn : ''}
 								/>
 								<br />
 								<input style={{ width: '100%' }} type="submit" value="Submit" />
@@ -58,7 +58,7 @@ class CryptocurrenciesTableComponent extends React.Component {
 			.then(responseObject => this.setState({ responseObject, isLoading: false }));
 	}
 
-	handleChangeAmmountYouOwn = (event) => {
+	handleInputChangeAmmountYouOwn = (event) => {
 		const target = event.target;
 		const value = target.value.trim();
 		const id = target.id;
@@ -70,11 +70,20 @@ class CryptocurrenciesTableComponent extends React.Component {
 
 			return cryptocurrency;
 		});
- 
-		let responseObjectUpdated = {...this.state.responseObject, data: updatedDataRows};
 
-		this.setState({...this.state, responseObject: responseObjectUpdated});
+		let responseObjectUpdated = { ...this.state.responseObject, data: updatedDataRows };
 
+		this.setState({ ...this.state, responseObject: responseObjectUpdated });
+
+	}
+
+	handleSubmitAmmountYouOwn = (event, cryptocurrencyId) => {
+		event.preventDefault();
+		let cryptocurrencyIdNumber = Number(cryptocurrencyId);
+		let filteredByIdCryptocurrencies = this.state.responseObject.data.filter(cryptocurrency => cryptocurrency.id === cryptocurrencyIdNumber);
+		if (filteredByIdCryptocurrencies.length === 1) {
+			localStorage.setItem(cryptocurrencyId, filteredByIdCryptocurrencies[0].ammountYouOwn);
+		}
 	}
 
 	render() {
@@ -83,7 +92,11 @@ class CryptocurrenciesTableComponent extends React.Component {
 		return (
 			<div>
 				{!isLoadingSuccessfullyData ?
-					(<h2>Loading</h2 >) : (<ResultTable responseObject={this.state.responseObject} handleChangeAmmountYouOwn={this.handleChangeAmmountYouOwn} />)
+					(<h2>Loading</h2 >) :
+					(<ResultTable
+						responseObject={this.state.responseObject}
+						handleInputChangeAmmountYouOwn={this.handleInputChangeAmmountYouOwn}
+						handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} />)
 				}
 			</div>
 		);
