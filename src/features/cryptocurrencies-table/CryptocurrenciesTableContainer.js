@@ -1,7 +1,8 @@
 import React from 'react';
-import CryptocurrenciesTableViewComponent from './CryptocurrenciesTableViewComponent';
+import CryptocurrenciesTableComponent from './CryptocurrenciesTableComponent';
+import LoaderComponentView from '../common/LoaderComponentView';
 
-class CryptocurrenciesTableComponent extends React.Component {
+class CryptocurrenciesTableContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -12,21 +13,24 @@ class CryptocurrenciesTableComponent extends React.Component {
 	}
 
 	componentDidMount() {
-		fetch('https://api.coinmarketcap.com/v2/ticker/?limit=50&structure=array')
-			.then(response => response.json())
-			.then(responseObject => {
-				let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
-					let ammountYouOwn = localStorage.getItem(cryptocurrency.id);
-					if (ammountYouOwn) {
-						return { ...cryptocurrency, ammountYouOwn };
-					}
-					return cryptocurrency;
+
+		setTimeout(() => {
+			fetch('https://api.coinmarketcap.com/v2/ticker/?limit=50&structure=array')
+				.then(response => response.json())
+				.then(responseObject => {
+					let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
+						let ammountYouOwn = localStorage.getItem(cryptocurrency.id);
+						if (ammountYouOwn) {
+							return { ...cryptocurrency, ammountYouOwn };
+						}
+						return cryptocurrency;
+					});
+
+					let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
+
+					this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
 				});
-
-				let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
-
-				this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
-			});
+		}, 1000);
 	}
 
 	handleInputChangeAmmountYouOwn = (event) => {
@@ -62,14 +66,14 @@ class CryptocurrenciesTableComponent extends React.Component {
 
 		if (isLoadingSuccessfullyData) {
 			return (
-				<CryptocurrenciesTableViewComponent
+				<CryptocurrenciesTableComponent
 					responseObject={this.state.responseObject}
 					handleInputChangeAmmountYouOwn={this.handleInputChangeAmmountYouOwn}
 					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} />);
 		} else {
-			return (<h2>Loading</h2>);
+			return (<LoaderComponentView />);
 		}
 	}
 }
 
-export default CryptocurrenciesTableComponent;
+export default CryptocurrenciesTableContainer;

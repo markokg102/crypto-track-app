@@ -1,6 +1,7 @@
 import React from 'react';
+import './CryptocurrenciesTableStyle.scss';
 
-class CryptocurrenciesTableViewComponent extends React.Component {
+class CryptocurrenciesTableComponent extends React.Component {
 	render() {
 		return (
 			<table style={{ width: '100%' }}>
@@ -20,7 +21,9 @@ class CryptocurrenciesTableViewComponent extends React.Component {
 							<td>{cryptocurrency.name}</td>
 							<td>{cryptocurrency.symbol}</td>
 							<td>{cryptocurrency.quotes.USD.price}</td>
-							<td>{cryptocurrency.quotes.USD.percent_change_24h}</td>
+							<td className={cryptocurrency.quotes.USD.percent_change_24h > 0 ? 'positive-last24h' : 'negative-last24h'}>
+								{Math.abs(cryptocurrency.quotes.USD.percent_change_24h) + ' %'}
+							</td>
 							<td>
 								<form onSubmit={(event) => this.props.handleSubmitAmmountYouOwn(event, cryptocurrency.id)}>
 									<input
@@ -43,4 +46,4 @@ class CryptocurrenciesTableViewComponent extends React.Component {
 
 }
 
-export default CryptocurrenciesTableViewComponent;
+export default CryptocurrenciesTableComponent;

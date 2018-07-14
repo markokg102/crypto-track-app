@@ -1,0 +1,34 @@
+$even-row-color: #bababa;
+$odd-row-color: white;
+
+table {
+    font-family: arial, sans-serif;
+    border: 1px solid grey;
+    width: 100%;
+}
+
+td, th {
+    text-align: center;
+    padding: 8px;
+    border-spacing: 0px;
+}
+
+tbody {
+    border-spacing: 0;
+}
+
+tr:nth-child(even) {
+    background-color: $odd-row-color
+}
+
+tr:nth-child(odd) {
+    background-color: $even-row-color;
+}
+
+.negative-last24h {
+    color: red;
+}
+
+.positive-last24h {
+    color: green;
+}
