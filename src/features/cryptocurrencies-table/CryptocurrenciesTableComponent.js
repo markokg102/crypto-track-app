@@ -33,7 +33,7 @@ class CryptocurrenciesTableComponent extends React.Component {
 										value={cryptocurrency.ammountYouOwn ? cryptocurrency.ammountYouOwn : ''}
 									/>
 									<br />
-									<input style={{ width: '100%' }} type="submit" value="Submit" />
+									<input disabled={!cryptocurrency.ammountYouOwnChanged} style={{ width: '100%' }} type="submit" value="Submit" />
 								</form>
 							</td>
 							<td>{cryptocurrency.ammountYouOwn ? cryptocurrency.ammountYouOwn * cryptocurrency.quotes.USD.price : ''}</td>

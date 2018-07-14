@@ -12,25 +12,35 @@ class CryptocurrenciesTableContainer extends React.Component {
 		};
 	}
 
-	componentDidMount() {
+	loadData = () => {
+		this.setState({ ...this.state, isLoading: true }, () => {
+			setTimeout(() => {
+				fetch('https://api.coinmarketcap.com/v2/ticker/?limit=50&structure=array')
+					.then(response => response.json())
+					.then(responseObject => {
+						let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
+							let ammountYouOwn = localStorage.getItem(cryptocurrency.id);
+							if (ammountYouOwn) {
+								return { ...cryptocurrency, ammountYouOwn, ammountYouOwnChanged: false };
+							}
+							return { ...cryptocurrency, ammountYouOwnChanged: false };
+						});
 
-		setTimeout(() => {
-			fetch('https://api.coinmarketcap.com/v2/ticker/?limit=50&structure=array')
-				.then(response => response.json())
-				.then(responseObject => {
-					let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
-						let ammountYouOwn = localStorage.getItem(cryptocurrency.id);
-						if (ammountYouOwn) {
-							return { ...cryptocurrency, ammountYouOwn };
-						}
-						return cryptocurrency;
+						let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
+
+						this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
 					});
+			}, 1000);
+		});
+	}
 
-					let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
+	componentDidMount() {
+		this.interval = setInterval(() => this.loadData(), 60000);
+		this.loadData();
+	}
 
-					this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
-				});
-		}, 1000);
+	componentWillUnmount() {
+		clearInterval(this.interval);
 	}
 
 	handleInputChangeAmmountYouOwn = (event) => {
@@ -40,7 +50,7 @@ class CryptocurrenciesTableContainer extends React.Component {
 		let updatedDataRows = this.state.responseObject.data.map(cryptocurrency => {
 
 			if (cryptocurrency.id === Number(id)) {
-				return { ...cryptocurrency, ammountYouOwn: value };
+				return { ...cryptocurrency, ammountYouOwn: value, ammountYouOwnChanged: true };
 			}
 
 			return cryptocurrency;
@@ -59,6 +69,12 @@ class CryptocurrenciesTableContainer extends React.Component {
 		if (filteredByIdCryptocurrencies.length === 1) {
 			localStorage.setItem(cryptocurrencyId, filteredByIdCryptocurrencies[0].ammountYouOwn);
 		}
+	}
+
+	refreshEvery60Seconds() {
+		// this.setState(prevState => ({
+		// 	seconds: prevState.seconds + 1
+		// }));
 	}
 
 	render() {
