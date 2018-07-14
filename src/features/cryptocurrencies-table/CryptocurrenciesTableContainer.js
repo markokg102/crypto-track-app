@@ -1,46 +1,5 @@
 import React from 'react';
-
-
-const ResultTable = (props) => {
-	return (
-		<table style={{ width: '100%' }}>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Short name</th>
-					<th>$ value</th>
-					<th>last 24h</th>
-					<th>Ammount you own</th>
-					<th>$ value of your coin</th>
-				</tr>
-			</thead>
-			<tbody>
-				{props.responseObject.data.map(cryptocurrency => (
-					<tr key={'row' + cryptocurrency.id}>
-						<td>{cryptocurrency.name}</td>
-						<td>{cryptocurrency.symbol}</td>
-						<td>{cryptocurrency.quotes.USD.price}</td>
-						<td>{cryptocurrency.quotes.USD.percent_change_24h}</td>
-						<td>
-							<form onSubmit={(event) => props.handleSubmitAmmountYouOwn(event, cryptocurrency.id)}>
-								<input
-									style={{ width: '100%' }}
-									id={cryptocurrency.id}
-									onChange={props.handleInputChangeAmmountYouOwn}
-									value={cryptocurrency.ammountYouOwn ? cryptocurrency.ammountYouOwn : ''}
-								/>
-								<br />
-								<input style={{ width: '100%' }} type="submit" value="Submit" />
-							</form>
-						</td>
-						<td>{0.5 * cryptocurrency.quotes.USD.price}</td>
-					</tr>
-				))}
-			</tbody>
-		</table>
-	);
-};
-
+import CryptocurrenciesTableViewComponent from './CryptocurrenciesTableViewComponent';
 
 class CryptocurrenciesTableComponent extends React.Component {
 
@@ -58,13 +17,13 @@ class CryptocurrenciesTableComponent extends React.Component {
 			.then(responseObject => {
 				let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
 					let ammountYouOwn = localStorage.getItem(cryptocurrency.id);
-					if(ammountYouOwn) {
-						return {...cryptocurrency, ammountYouOwn};
+					if (ammountYouOwn) {
+						return { ...cryptocurrency, ammountYouOwn };
 					}
 					return cryptocurrency;
 				});
 
-				let responseObjectWithAmmountYouOwnFromLocalStorage = {...responseObject, data: dataWithAmmountYouOwnFromLocalStorage}
+				let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
 
 				this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
 			});
@@ -101,17 +60,15 @@ class CryptocurrenciesTableComponent extends React.Component {
 	render() {
 		const isLoadingSuccessfullyData = !this.state.isLoading && this.state.responseObject;
 
-		return (
-			<div>
-				{!isLoadingSuccessfullyData ?
-					(<h2>Loading</h2 >) :
-					(<ResultTable
-						responseObject={this.state.responseObject}
-						handleInputChangeAmmountYouOwn={this.handleInputChangeAmmountYouOwn}
-						handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} />)
-				}
-			</div>
-		);
+		if (isLoadingSuccessfullyData) {
+			return (
+				<CryptocurrenciesTableViewComponent
+					responseObject={this.state.responseObject}
+					handleInputChangeAmmountYouOwn={this.handleInputChangeAmmountYouOwn}
+					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} />);
+		} else {
+			return (<h2>Loading</h2>);
+		}
 	}
 }
 

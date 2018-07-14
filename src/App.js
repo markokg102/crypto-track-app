@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import CryptocurrenciesTableComponent from './features/cryptocurrencies-table/CryptocurrenciesTableComponent';
+import CryptocurrenciesTableContainer from './features/cryptocurrencies-table/CryptocurrenciesTableContainer';
 import CryptocurrencyDetailsComponent from './features/cryptocurrency-details/CryptocurrencyDetailsComponent';
 
 class App extends React.Component {
@@ -11,7 +11,7 @@ class App extends React.Component {
 				<h1>CryptoTrack App</h1>
 				<Router>
 					<Switch>
-						<Route path="/" exact component={CryptocurrenciesTableComponent} />
+						<Route path="/" exact component={CryptocurrenciesTableContainer} />
 						<Route path="/details" exact component={CryptocurrencyDetailsComponent} />
 						<Route component={() => <div>Page not found, sorry:(</div>} />
 					</Switch>

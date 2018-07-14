@@ -16,19 +16,11 @@
     ],
     "rules": {
         "indent": [
-            "error",
+            "warn",
             "tab"
         ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
         "semi": [
-            "error",
+            "warn",
             "always"
         ],
         "react/jsx-uses-vars": 1
