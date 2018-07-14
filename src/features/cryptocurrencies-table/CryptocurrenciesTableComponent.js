@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './CryptocurrenciesTableStyle.scss';
 
 class CryptocurrenciesTableComponent extends React.Component {
@@ -18,7 +19,7 @@ class CryptocurrenciesTableComponent extends React.Component {
 				<tbody>
 					{this.props.responseObject.data.map(cryptocurrency => (
 						<tr key={'row' + cryptocurrency.id}>
-							<td>{cryptocurrency.name}</td>
+							<td><Link to={'/details/' + cryptocurrency.id + '/'}>{cryptocurrency.name}</Link></td>
 							<td>{cryptocurrency.symbol}</td>
 							<td>{cryptocurrency.quotes.USD.price}</td>
 							<td className={cryptocurrency.quotes.USD.percent_change_24h > 0 ? 'positive-last24h' : 'negative-last24h'}>

@@ -30,7 +30,7 @@ class CryptocurrenciesTableContainer extends React.Component {
 
 						this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
 					});
-			}, 1000);
+			}, 500);
 		});
 	}
 
@@ -69,12 +69,6 @@ class CryptocurrenciesTableContainer extends React.Component {
 		if (filteredByIdCryptocurrencies.length === 1) {
 			localStorage.setItem(cryptocurrencyId, filteredByIdCryptocurrencies[0].ammountYouOwn);
 		}
-	}
-
-	refreshEvery60Seconds() {
-		// this.setState(prevState => ({
-		// 	seconds: prevState.seconds + 1
-		// }));
 	}
 
 	render() {

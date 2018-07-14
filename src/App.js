@@ -12,7 +12,7 @@ class App extends React.Component {
 				<Router>
 					<Switch>
 						<Route path="/" exact component={CryptocurrenciesTableContainer} />
-						<Route path="/details" exact component={CryptocurrencyDetailsComponent} />
+						<Route path="/details/:id" exact component={CryptocurrencyDetailsComponent} />
 						<Route component={() => <div>Page not found, sorry:(</div>} />
 					</Switch>
 				</Router>
