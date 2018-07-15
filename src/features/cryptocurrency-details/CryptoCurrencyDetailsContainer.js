@@ -1,6 +1,6 @@
 import React from 'react';
 import './CryptocurrencyDetailsStyle.scss';
-import LoaderComponentView from '../common/LoaderComponentView';
+import LoaderComponent from '../common/LoaderComponent';
 import { fetchCrypyocurrencyById } from '../common/FetchDataModule';
 import CryptocurrencyDetailsComponent from './CryptocurrencyDetailsComponent';
 
@@ -30,16 +30,15 @@ class CryptocurrencyDetailsContainer extends React.Component {
 	}
 
 	render() {
-
 		const isLoadingSuccessfullyData = !this.state.isLoading && this.state.responseObject;
 
 		if (isLoadingSuccessfullyData) {
-			return (<CryptocurrencyDetailsComponent responseObject={this.state.responseObject} />);
+			return (<CryptocurrencyDetailsComponent data={this.state.responseObject.data} />);
 		} else {
-			return (<LoaderComponentView />);
+			return (<LoaderComponent title='Loading cryptocurrency details' />);
 		}
-
 	}
+
 }
 
 export default CryptocurrencyDetailsContainer;

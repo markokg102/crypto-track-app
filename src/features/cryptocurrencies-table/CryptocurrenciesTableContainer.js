@@ -1,6 +1,6 @@
 import React from 'react';
 import CryptocurrenciesTableComponent from './CryptocurrenciesTableComponent';
-import LoaderComponentView from '../common/LoaderComponentView';
+import LoaderComponent from '../common/LoaderComponent';
 import { fetchCryptocurrencies } from '../common/FetchDataModule';
 
 const ROWS_PER_PAGE = 10;
@@ -125,11 +125,15 @@ class CryptocurrenciesTableContainer extends React.Component {
 		if (isLoadingSuccessfullyData) {
 			return (
 				<CryptocurrenciesTableComponent
-					responseObject={this.state.responseObject}
+					data={this.state.responseObject.data}
 					handleInputChangeAmmountYouOwn={this.handleInputChangeAmmountYouOwn}
-					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} rowsPerPage={ROWS_PER_PAGE} numberOfPages={this.state.numberOfPages} currentPage={this.state.currentPage} changePage={this.changePage} />);
+					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn}
+					rowsPerPage={ROWS_PER_PAGE}
+					numberOfPages={this.state.numberOfPages}
+					currentPage={this.state.currentPage}
+					changePage={this.changePage} />);
 		} else {
-			return (<LoaderComponentView />);
+			return (<LoaderComponent title={!this.state.firstLoadPassed ? 'Loading cryptocurrencies' : 'Refreshing cryptocurrencies...'} />);
 		}
 	}
 }

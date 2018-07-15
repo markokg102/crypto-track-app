@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import './CryptocurrenciesTableStyle.scss';
 
 class CryptocurrenciesTableComponent extends React.Component {
 	render() {
 		let paginationLinks = [];
-		let currentPageData = this.props.responseObject.data.filter(
+		let currentPageData = this.props.data.filter(
 			(cryptocurrency, index) => {
 				return index >= (this.props.currentPage - 1) * this.props.rowsPerPage && index < this.props.currentPage * this.props.rowsPerPage;
 			});
@@ -69,5 +70,40 @@ class CryptocurrenciesTableComponent extends React.Component {
 	}
 
 }
+
+CryptocurrenciesTableComponent.propTypes = {
+	data: PropTypes.arrayOf(PropTypes.shape({
+		id: PropTypes.number.isRequired,
+		name: PropTypes.string.isRequired,
+		symbol: PropTypes.string.isRequired,
+		website_slug: PropTypes.string.isRequired,
+		rank: PropTypes.number,
+		circulating_supply: PropTypes.number,
+		total_supply: PropTypes.number,
+		max_supply: PropTypes.number,
+		quotes: PropTypes.shape({
+			USD: PropTypes.shape({
+				price: PropTypes.number.isRequired,
+				volume_24h: PropTypes.number,
+				market_cap: PropTypes.number,
+				percent_change_1h: PropTypes.number,
+				percent_change_24h: PropTypes.number,
+				percent_change_7d: PropTypes.number
+			}).isRequired
+		}).isRequired,
+		last_updated: PropTypes.number
+	}).isRequired).isRequired,
+	metadata: PropTypes.shape({
+		timestamp: PropTypes.number,
+		num_cryptocurrencies: PropTypes.number,
+		error: PropTypes.any
+	}),
+	handleInputChangeAmmountYouOwn: PropTypes.func.isRequired,
+	handleSubmitAmmountYouOwn: PropTypes.func.isRequired,
+	rowsPerPage: PropTypes.number.isRequired,
+	numberOfPages: PropTypes.number.isRequired,
+	currentPage: PropTypes.number.isRequired,
+	changePage: PropTypes.func.isRequired
+};
 
 export default CryptocurrenciesTableComponent;
