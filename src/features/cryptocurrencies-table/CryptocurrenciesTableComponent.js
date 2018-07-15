@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './CryptocurrenciesTableStyle.scss';
 
+/**
+ * CryptocurrenciesTableComponent is pure UI component for rendering list of cryptocurrencies with pagination.
+ * All data and handlers are received from parrent container component.
+ * 
+ */
 class CryptocurrenciesTableComponent extends React.Component {
 	render() {
 		let paginationLinks = [];
@@ -43,7 +48,7 @@ class CryptocurrenciesTableComponent extends React.Component {
 							<tr key={'row' + cryptocurrency.id}>
 								<td><Link to={'/details/' + cryptocurrency.id + '/'}>{cryptocurrency.name}</Link></td>
 								<td>{cryptocurrency.symbol}</td>
-								<td>{cryptocurrency.quotes.USD.price}</td>
+								<td>{'$ ' + cryptocurrency.quotes.USD.price.toFixed(2)}</td>
 								<td className={cryptocurrency.quotes.USD.percent_change_24h > 0 ? 'positive-last24h' : 'negative-last24h'}>
 									{Math.abs(cryptocurrency.quotes.USD.percent_change_24h) + ' %'}
 								</td>
@@ -58,11 +63,11 @@ class CryptocurrenciesTableComponent extends React.Component {
 											value={cryptocurrency.ammountYouOwn ? cryptocurrency.ammountYouOwn : ''}
 										/>
 										<br />
-										<input disabled={!cryptocurrency.ammountYouOwnChanged} style={{ width: '100%' }} type="submit" value="Submit" />
+										<input className='submitButton' disabled={!cryptocurrency.ammountYouOwnChanged} style={{ width: '100%' }} type="submit" value="Submit" />
 									</form>
 								</td>
-								<td>{cryptocurrency.ammountYouOwnInDolars}</td>
-								<td>{!isNaN(cryptocurrency.gainedLostSinceLastVisit) ? cryptocurrency.gainedLostSinceLastVisit : ''}</td>
+								<td>{ cryptocurrency.ammountYouOwnInDolars ? '$ ' + cryptocurrency.ammountYouOwnInDolars.toFixed(2) : ''}</td>
+								<td>{!isNaN(cryptocurrency.gainedLostSinceLastVisit) ? '$ ' + cryptocurrency.gainedLostSinceLastVisit.toFixed(2) : ''}</td>
 							</tr>
 						))}
 					</tbody>

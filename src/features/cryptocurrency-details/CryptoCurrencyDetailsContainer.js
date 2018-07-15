@@ -4,6 +4,12 @@ import LoaderComponent from '../common/LoaderComponent';
 import { fetchCrypyocurrencyById } from '../common/FetchDataModule';
 import CryptocurrencyDetailsComponent from './CryptocurrencyDetailsComponent';
 
+/**
+ * 
+ * This container component receives id from router url and then use fetch methods to receive data about cryptocurrency.
+ * Before receiving data loader is active afrer data are received this component shows data by rendering CryptocurrencyDetailsComponent
+ * 
+ */
 class CryptocurrencyDetailsContainer extends React.Component {
 
 	constructor(props) {

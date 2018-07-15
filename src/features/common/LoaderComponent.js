@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * 
+ * Simple loader react component used on both pages before data was loaded.
+ * 
+ */
 const LoaderComponent = ({ title }) => {
     return (
         <div>

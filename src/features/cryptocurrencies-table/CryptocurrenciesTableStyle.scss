@@ -3,7 +3,7 @@ $odd-row-color: white;
 
 table {
     font-family: arial, sans-serif;
-    border: 1px solid grey;
+    border: 10px solid #fbfbfb;
     width: 100%;
 }
 
@@ -39,4 +39,9 @@ tr:nth-child(odd) {
 
 .inactivePage {
 
+}
+
+.submitButton {
+    border-radius: 4px;
+    height: 20px;
 }
