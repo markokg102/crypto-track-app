@@ -1,8 +1,8 @@
 import React from 'react';
 import CryptocurrenciesTableComponent from './CryptocurrenciesTableComponent';
 import LoaderComponentView from '../common/LoaderComponentView';
+import { fetchCryptocurrencies } from '../common/FetchDataModule';
 
-const ROW_LIMIT = 50;
 const ROWS_PER_PAGE = 10;
 
 class CryptocurrenciesTableContainer extends React.Component {
@@ -13,29 +13,57 @@ class CryptocurrenciesTableContainer extends React.Component {
 			responseObject: null,
 			isLoading: true,
 			currentPage: 1,
-			numberOfPages: null
+			numberOfPages: null,
+			firstLoadPassed: false
 		};
+	}
+
+	updateLocaleStorageYourAmmountInDolarsOnFirstLoad = (cryptocurrency) => {
+		let ammountYouOwnObjectSavedInLocalStorage = JSON.parse(localStorage.getItem(cryptocurrency.id));
+		if (ammountYouOwnObjectSavedInLocalStorage) {
+			ammountYouOwnObjectSavedInLocalStorage.ammountYouOwnInDolars = cryptocurrency.quotes.USD.price * ammountYouOwnObjectSavedInLocalStorage.ammountYouOwn;
+			localStorage.setItem(cryptocurrency.id, JSON.stringify(ammountYouOwnObjectSavedInLocalStorage));
+		}
+	}
+
+	fetchDataAndUpdateState = () => {
+		fetchCryptocurrencies().then(responseObject => {
+			let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
+
+				if (!this.state.firstLoadPassed) {
+					this.updateLocaleStorageYourAmmountInDolarsOnFirstLoad(cryptocurrency);
+				}
+
+				let ammountYouOwnObjectSavedInLocalStorage = JSON.parse(localStorage.getItem(cryptocurrency.id));
+
+				if (ammountYouOwnObjectSavedInLocalStorage) {
+
+					let cryptocurrencyWithAmmountYouOwn = { ...cryptocurrency };
+
+					cryptocurrencyWithAmmountYouOwn.ammountYouOwn = ammountYouOwnObjectSavedInLocalStorage.ammountYouOwn;
+					cryptocurrencyWithAmmountYouOwn.ammountYouOwnChanged = false;
+					cryptocurrencyWithAmmountYouOwn.ammountYouOwnInDolars = ammountYouOwnObjectSavedInLocalStorage.ammountYouOwnInDolars;
+					cryptocurrencyWithAmmountYouOwn.gainedLostSinceLastVisit = cryptocurrencyWithAmmountYouOwn.ammountYouOwn * cryptocurrencyWithAmmountYouOwn.quotes.USD.price - cryptocurrencyWithAmmountYouOwn.ammountYouOwnInDolars;
+
+					return cryptocurrencyWithAmmountYouOwn;
+
+				}
+
+				return { ...cryptocurrency, ammountYouOwnChanged: false };
+
+			});
+
+			let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
+
+			this.setState({ ...this.state, responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false, numberOfPages: Math.trunc(responseObjectWithAmmountYouOwnFromLocalStorage.data.length / ROWS_PER_PAGE), firstLoadPassed: true });
+		});
 	}
 
 	loadData = () => {
 		this.setState({ ...this.state, isLoading: true }, () => {
 			setTimeout(() => {
-				fetch('https://api.coinmarketcap.com/v2/ticker/?limit=' + ROW_LIMIT + '&structure=array')
-					.then(response => response.json())
-					.then(responseObject => {
-						let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
-							let ammountYouOwn = localStorage.getItem(cryptocurrency.id);
-							if (ammountYouOwn) {
-								return { ...cryptocurrency, ammountYouOwn, ammountYouOwnChanged: false };
-							}
-							return { ...cryptocurrency, ammountYouOwnChanged: false };
-						});
-
-						let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
-
-						this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false, numberOfPages: Math.trunc(responseObjectWithAmmountYouOwnFromLocalStorage.data.length / ROWS_PER_PAGE)});
-					});
-			}, 200);
+				this.fetchDataAndUpdateState();
+			}, 300);
 		});
 	}
 
@@ -70,15 +98,25 @@ class CryptocurrenciesTableContainer extends React.Component {
 	handleSubmitAmmountYouOwn = (event, cryptocurrencyId) => {
 		event.preventDefault();
 		let cryptocurrencyIdNumber = Number(cryptocurrencyId);
-		let filteredByIdCryptocurrencies = this.state.responseObject.data.filter(cryptocurrency => cryptocurrency.id === cryptocurrencyIdNumber);
-		if (filteredByIdCryptocurrencies.length === 1) {
-			localStorage.setItem(cryptocurrencyId, filteredByIdCryptocurrencies[0].ammountYouOwn);
-		}
+
+		let updatedDataRows = this.state.responseObject.data.map(cryptocurrency => {
+
+			if (cryptocurrency.id === cryptocurrencyIdNumber) {
+				let cryptocurrencyUpdated = { ...cryptocurrency, ammountYouOwnInDolars: cryptocurrency.ammountYouOwn * cryptocurrency.quotes.USD.price, gainedLostSinceLastVisit: 0, ammountYouOwnChanged: false };
+				localStorage.setItem(cryptocurrencyId, JSON.stringify({ ammountYouOwn: cryptocurrencyUpdated.ammountYouOwn, ammountYouOwnInDolars: cryptocurrencyUpdated.ammountYouOwn * cryptocurrencyUpdated.quotes.USD.price }));
+				return cryptocurrencyUpdated;
+			}
+			return cryptocurrency;
+		});
+
+		let responseObjectUpdated = { ...this.state.responseObject, data: updatedDataRows };
+
+		this.setState({ ...this.state, responseObject: responseObjectUpdated });
 	}
 
 	changePage = (event, pageNumber) => {
 		event.preventDefault();
-		this.setState({...this.state, currentPage: pageNumber});
+		this.setState({ ...this.state, currentPage: pageNumber });
 	}
 
 	render() {
@@ -89,7 +127,7 @@ class CryptocurrenciesTableContainer extends React.Component {
 				<CryptocurrenciesTableComponent
 					responseObject={this.state.responseObject}
 					handleInputChangeAmmountYouOwn={this.handleInputChangeAmmountYouOwn}
-					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} rowsPerPage={ROWS_PER_PAGE} numberOfPages={this.state.numberOfPages} currentPage={this.state.currentPage} changePage={this.changePage}/>);
+					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} rowsPerPage={ROWS_PER_PAGE} numberOfPages={this.state.numberOfPages} currentPage={this.state.currentPage} changePage={this.changePage} />);
 		} else {
 			return (<LoaderComponentView />);
 		}

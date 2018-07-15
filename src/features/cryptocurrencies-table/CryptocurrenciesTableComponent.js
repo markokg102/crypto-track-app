@@ -28,6 +28,7 @@ class CryptocurrenciesTableComponent extends React.Component {
 							<th>last 24h</th>
 							<th>Ammount you own</th>
 							<th>$ value of your coin</th>
+							<th>$ gained / lost since last visit(site reload)</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -53,7 +54,9 @@ class CryptocurrenciesTableComponent extends React.Component {
 										<input disabled={!cryptocurrency.ammountYouOwnChanged} style={{ width: '100%' }} type="submit" value="Submit" />
 									</form>
 								</td>
-								<td>{cryptocurrency.ammountYouOwn ? cryptocurrency.ammountYouOwn * cryptocurrency.quotes.USD.price : ''}</td>
+								<td>{cryptocurrency.ammountYouOwnInDolars}</td>
+								<td>{!isNaN(cryptocurrency.gainedLostSinceLastVisit) ? cryptocurrency.gainedLostSinceLastVisit  : ''}</td>
+								
 							</tr>
 						))}
 					</tbody>
