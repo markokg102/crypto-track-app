@@ -10,11 +10,9 @@ const CryptocurrencyDetailsComponent = ({ data }) => {
 	return (
 		<div>
 			<Link to="/"><button>Back to list</button></Link>
+			<h2>{data.name}</h2>
 			<div className="flex-container">
 				<div className="first-column">
-					<h2>{data.name}</h2>
-				</div>
-				<div className="second-column">
 					<label>Short name: {data.symbol}</label>
 					<label>Rank: {data.rank}</label>
 					<label>Website slug: {data.website_slug}</label>
@@ -24,7 +22,7 @@ const CryptocurrencyDetailsComponent = ({ data }) => {
 					<label>Last updated: {lastUpdated.toLocaleDateString() + ' ' + lastUpdated.toLocaleTimeString()}</label>
 					<label>Id: {data.id}</label>
 				</div>
-				<div className="third-column">
+				<div className="second-column">
 					<label>Price USD: {data.quotes.USD.price}</label>
 					<label>Volume in 24h:  {data.quotes.USD.volume_24h}</label>
 					<label>Market cap:  {data.quotes.USD.market_cap}</label>

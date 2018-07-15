@@ -6,16 +6,22 @@ import './CryptocurrenciesTableStyle.scss';
 class CryptocurrenciesTableComponent extends React.Component {
 	render() {
 		let paginationLinks = [];
-		let currentPageData = this.props.data.filter(
-			(cryptocurrency, index) => {
-				return index >= (this.props.currentPage - 1) * this.props.rowsPerPage && index < this.props.currentPage * this.props.rowsPerPage;
-			});
+
+		let currentPageData = this.props.data.filter((cryptocurrency, index) => {
+			return index >= (this.props.currentPage - 1) * this.props.rowsPerPage && index < this.props.currentPage * this.props.rowsPerPage;
+		});
+
 		for (let i = 1; i <= this.props.numberOfPages; i++) {
 			paginationLinks.push(
 				<span key={i} >
-					<a href='' onClick={(event) => this.props.changePage(event, i)} className={i === this.props.currentPage ? 'activePage' : 'inactivePage'}>
+					<a href=''
+						onClick={(event) => this.props.changePage(event, i)}
+						className={i === this.props.currentPage ? 'activePage' : 'inactivePage'}>
 						{i}
-					</a> </span>);
+					</a>
+					<span> </span>
+				</span>
+			);
 		}
 
 		return (
@@ -57,7 +63,6 @@ class CryptocurrenciesTableComponent extends React.Component {
 								</td>
 								<td>{cryptocurrency.ammountYouOwnInDolars}</td>
 								<td>{!isNaN(cryptocurrency.gainedLostSinceLastVisit) ? cryptocurrency.gainedLostSinceLastVisit : ''}</td>
-
 							</tr>
 						))}
 					</tbody>

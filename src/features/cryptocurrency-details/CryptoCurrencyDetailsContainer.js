@@ -25,7 +25,7 @@ class CryptocurrencyDetailsContainer extends React.Component {
 				fetchCrypyocurrencyById(cryptocurrencyId).then(responseObject => {
 					this.setState({ responseObject: responseObject, isLoading: false });
 				});
-			}, 200);
+			}, 300);
 		});
 	}
 

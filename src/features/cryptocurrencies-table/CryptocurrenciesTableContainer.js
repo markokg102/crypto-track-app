@@ -55,7 +55,12 @@ class CryptocurrenciesTableContainer extends React.Component {
 
 			let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
 
-			this.setState({ ...this.state, responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false, numberOfPages: Math.trunc(responseObjectWithAmmountYouOwnFromLocalStorage.data.length / ROWS_PER_PAGE), firstLoadPassed: true });
+			this.setState({
+				...this.state, responseObject: responseObjectWithAmmountYouOwnFromLocalStorage,
+				isLoading: false,
+				numberOfPages: Math.trunc(responseObjectWithAmmountYouOwnFromLocalStorage.data.length / ROWS_PER_PAGE),
+				firstLoadPassed: true
+			});
 		});
 	}
 
@@ -80,6 +85,12 @@ class CryptocurrenciesTableContainer extends React.Component {
 		const target = event.target;
 		const value = target.value.trim();
 		const id = target.id;
+
+		if (isNaN(value)) {
+			alert('You not entered number!');
+			return;
+		}
+
 		let updatedDataRows = this.state.responseObject.data.map(cryptocurrency => {
 
 			if (cryptocurrency.id === Number(id)) {
@@ -87,12 +98,12 @@ class CryptocurrenciesTableContainer extends React.Component {
 			}
 
 			return cryptocurrency;
+
 		});
 
 		let responseObjectUpdated = { ...this.state.responseObject, data: updatedDataRows };
 
 		this.setState({ ...this.state, responseObject: responseObjectUpdated });
-
 	}
 
 	handleSubmitAmmountYouOwn = (event, cryptocurrencyId) => {

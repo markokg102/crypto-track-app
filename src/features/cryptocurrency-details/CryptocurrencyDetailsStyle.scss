@@ -13,7 +13,6 @@
     flex-direction: column;
     order: 1;
     padding: 30px;
-    justify-content: left;
   }
 
   .second-column {
@@ -23,10 +22,7 @@
     padding: 30px;
   }
 
-
-  .third-column {
-    display: flex;
-    flex-direction: column;
-    order: 3;
-    padding: 30px; 
+  h2 {
+    text-align: center;
   }
+  
