@@ -28,6 +28,8 @@ class CryptocurrenciesTableComponent extends React.Component {
 							<td>
 								<form onSubmit={(event) => this.props.handleSubmitAmmountYouOwn(event, cryptocurrency.id)}>
 									<input
+										type="number" 
+										pattern="[0-9]+([\.,][0-9]+)?" step="0.01"
 										style={{ width: '100%' }}
 										id={cryptocurrency.id}
 										onChange={this.props.handleInputChangeAmmountYouOwn}
