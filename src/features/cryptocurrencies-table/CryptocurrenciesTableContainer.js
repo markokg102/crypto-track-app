@@ -2,20 +2,25 @@ import React from 'react';
 import CryptocurrenciesTableComponent from './CryptocurrenciesTableComponent';
 import LoaderComponentView from '../common/LoaderComponentView';
 
+const ROW_LIMIT = 50;
+const ROWS_PER_PAGE = 10;
+
 class CryptocurrenciesTableContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			responseObject: null,
-			isLoading: true
+			isLoading: true,
+			currentPage: 1,
+			numberOfPages: null
 		};
 	}
 
 	loadData = () => {
 		this.setState({ ...this.state, isLoading: true }, () => {
 			setTimeout(() => {
-				fetch('https://api.coinmarketcap.com/v2/ticker/?limit=50&structure=array')
+				fetch('https://api.coinmarketcap.com/v2/ticker/?limit=' + ROW_LIMIT + '&structure=array')
 					.then(response => response.json())
 					.then(responseObject => {
 						let dataWithAmmountYouOwnFromLocalStorage = responseObject.data.map(cryptocurrency => {
@@ -28,7 +33,7 @@ class CryptocurrenciesTableContainer extends React.Component {
 
 						let responseObjectWithAmmountYouOwnFromLocalStorage = { ...responseObject, data: dataWithAmmountYouOwnFromLocalStorage };
 
-						this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
+						this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false, numberOfPages: Math.trunc(responseObjectWithAmmountYouOwnFromLocalStorage.data.length / ROWS_PER_PAGE)});
 					});
 			}, 200);
 		});
@@ -71,6 +76,11 @@ class CryptocurrenciesTableContainer extends React.Component {
 		}
 	}
 
+	changePage = (event, pageNumber) => {
+		event.preventDefault();
+		this.setState({...this.state, currentPage: pageNumber});
+	}
+
 	render() {
 		const isLoadingSuccessfullyData = !this.state.isLoading && this.state.responseObject;
 
@@ -79,7 +89,7 @@ class CryptocurrenciesTableContainer extends React.Component {
 				<CryptocurrenciesTableComponent
 					responseObject={this.state.responseObject}
 					handleInputChangeAmmountYouOwn={this.handleInputChangeAmmountYouOwn}
-					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} />);
+					handleSubmitAmmountYouOwn={this.handleSubmitAmmountYouOwn} rowsPerPage={ROWS_PER_PAGE} numberOfPages={this.state.numberOfPages} currentPage={this.state.currentPage} changePage={this.changePage}/>);
 		} else {
 			return (<LoaderComponentView />);
 		}

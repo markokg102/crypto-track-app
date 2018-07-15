@@ -23,7 +23,6 @@ class CryptocurrencyDetailsComponent extends React.Component {
 			setTimeout(() => {
 				fetch('https://api.coinmarketcap.com/v2/ticker/' + cryptocurrencyId + '/')
 					.then(response => {
-						console.log(response);
 						return response.json();
 					})
 					.then(responseObject => {
@@ -46,10 +45,10 @@ class CryptocurrencyDetailsComponent extends React.Component {
 				<div>
 					<Link to="/"><button>Back to list</button></Link>
 					<div className="flex-container">
-						<div class="first-column">
+						<div className="first-column">
 							<h2>{this.state.responseObject.data.name}</h2>
 						</div>
-						<div class="second-column">
+						<div className="second-column">
 							<label>Short name: {this.state.responseObject.data.symbol}</label>
 							<label>Rank: {this.state.responseObject.data.rank}</label>
 							<label>Website slug: {this.state.responseObject.data.website_slug}</label>
@@ -59,7 +58,7 @@ class CryptocurrencyDetailsComponent extends React.Component {
 							<label>Last updated: {lastUpdated.toLocaleDateString() + ' ' + lastUpdated.toLocaleTimeString()}</label>
 							<label>Id: {this.state.responseObject.data.id}</label>
 						</div>
-						<div class="third-column">
+						<div className="third-column">
 							<label>Price USD: {this.state.responseObject.data.quotes.USD.price}</label>
 							<label>Volume in 24h:  {this.state.responseObject.data.quotes.USD.volume_24h}</label>
 							<label>Market cap:  {this.state.responseObject.data.quotes.USD.market_cap}</label>
