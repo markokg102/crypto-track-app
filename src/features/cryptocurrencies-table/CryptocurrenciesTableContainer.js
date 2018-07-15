@@ -30,7 +30,7 @@ class CryptocurrenciesTableContainer extends React.Component {
 
 						this.setState({ responseObject: responseObjectWithAmmountYouOwnFromLocalStorage, isLoading: false });
 					});
-			}, 500);
+			}, 200);
 		});
 	}
 

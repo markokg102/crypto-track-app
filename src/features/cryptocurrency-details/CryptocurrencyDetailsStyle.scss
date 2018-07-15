@@ -1,0 +1,32 @@
+  
+.flex-container {
+    display: flex;
+    background-color: #bababa;
+    border-radius: 3px;
+    padding: 1.8em;
+    flex-wrap: wrap ;
+    justify-content: center;
+  }
+ 
+  .first-column {
+    display: flex;
+    flex-direction: column;
+    order: 1;
+    padding: 30px;
+    justify-content: left;
+  }
+
+  .second-column {
+    display: flex;
+    flex-direction: column;
+    order: 2;
+    padding: 30px;
+  }
+
+
+  .third-column {
+    display: flex;
+    flex-direction: column;
+    order: 3;
+    padding: 30px; 
+  }
