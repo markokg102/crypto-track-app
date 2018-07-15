@@ -19,6 +19,8 @@ For this purpose I host this application on firebase:
 For building prod version execute<br />
 **yarn build** or **npm build**<br />
 
+For runing test execute<br />
+**yarn test** or **npm test**<br />
 
 My focuse was been to cover every requirments.<br />
 
