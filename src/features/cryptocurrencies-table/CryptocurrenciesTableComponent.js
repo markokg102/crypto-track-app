@@ -55,8 +55,8 @@ class CryptocurrenciesTableComponent extends React.Component {
 									</form>
 								</td>
 								<td>{cryptocurrency.ammountYouOwnInDolars}</td>
-								<td>{!isNaN(cryptocurrency.gainedLostSinceLastVisit) ? cryptocurrency.gainedLostSinceLastVisit  : ''}</td>
-								
+								<td>{!isNaN(cryptocurrency.gainedLostSinceLastVisit) ? cryptocurrency.gainedLostSinceLastVisit : ''}</td>
+
 							</tr>
 						))}
 					</tbody>

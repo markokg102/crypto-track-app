@@ -6,3 +6,11 @@ export const fetchCryptocurrencies = () => {
         .then(responseObject => responseObject)
         .catch(error => console.warn(error));
 };
+
+export const fetchCrypyocurrencyById = (cryptocurrencyId) => {
+    return fetch('https://api.coinmarketcap.com/v2/ticker/' + cryptocurrencyId + '/')
+        .then(response => {
+            return response.json();
+        })
+        .then(responseObject => responseObject);
+};
